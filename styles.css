@@ -1,0 +1,157 @@
+html, body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #e8ecef;
+    color: #333;
+    height: 100%;
+    overflow: hidden;
+}
+header {
+    background: linear-gradient(90deg, #0f172a, #1e3a8a);
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid #334155;
+}
+header .glow {
+    font-size: 2.4em;
+    font-weight: 700;
+    background: linear-gradient(90deg, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.5), 0 0 20px rgba(129, 140, 248, 0.4);
+    letter-spacing: 2px;
+}
+nav {
+    background: #1e3a8a;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+nav a:hover {
+    background: #10b981;
+    transform: scale(1.03);
+}
+.container {
+    display: flex;
+    flex-direction: row;
+    height: calc(100vh - 90px);
+    padding: 8px;
+    gap: 8px;
+}
+section {
+    padding: 0;
+    display: none;
+    flex: 1;
+    overflow-y: auto;
+}
+section.active {
+    display: block;
+}
+#map {
+    height: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    flex: 4;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.tools {
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    max-width: 280px;
+    width: 100%;
+    flex: 1;
+    overflow-y: auto;
+    max-height: 100%;
+}
+.tools label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+    color: #374151;
+}
+.tools select, .tools input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 0.9em;
+}
+.tools button {
+    background: #3b82f6;
+    color: white;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s ease;
+    margin-bottom: 8px;
+}
+.tools button:hover {
+    background: #2563eb;
+}
+#removeSelectedBtn, #removeSelectedRoadBtn, #clearProximityDataBtn {
+    background: #ef4444;
+}
+#removeSelectedBtn:hover, #removeSelectedRoadBtn:hover, #clearProximityDataBtn:hover {
+    background: #dc2626;
+}
+h2 {
+    border-left: 4px solid #2563eb;
+    padding-left: 8px;
+    margin: 8px 0;
+    font-size: 1.3em;
+    color: #1f2937;
+}
+.tool-section {
+    margin-top: 10px;
+}
+.leaflet-popup-content {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 0.9em;
+    color: #1f2937;
+}
+#affectedHousesResult, #proximityResults, #loadingMessage {
+    margin-top: 10px;
+    font-weight: 500;
+    color: #1f2937;
+}
+#loadingMessage {
+    color: #2563eb;
+}
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        height: auto;
+        overflow-y: auto;
+    }
+    #map {
+        height: 50vh;
+        margin-bottom: 8px;
+    }
+    .tools {
+        max-width: 100%;
+        max-height: none;
+    }
+    header {
+        font-size: 1.4em;
+    }
+    nav {
+        gap: 10px;
+    }
+}
