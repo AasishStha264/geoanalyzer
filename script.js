@@ -1,4 +1,5 @@
 // Initialize Leaflet map centered on Dhulikhel, Nepal
+const BASE_URL = 'https://geoanalyzer-server.onrender.com';
 const map = L.map('map', {
     center: [27.6201, 85.5394], // Dhulikhel, Nepal
     zoom: 13,
@@ -128,7 +129,7 @@ async function loadOverlayLayers() {
     const loadingMessage = document.getElementById('loadingMessage');
     loadingMessage.style.display = 'block';
     try {
-        const localResponse = await fetch('http://localhost:3000/api/local');
+        const localResponse = await fetch(`${BASE_URL}/api/local`)
         if (!localResponse.ok) throw new Error('Failed to fetch local level data: ' + localResponse.statusText);
         geojsonLocal = await localResponse.json();
         if (!geojsonLocal || !geojsonLocal.type || !Array.isArray(geojsonLocal.features)) {
@@ -139,7 +140,7 @@ async function loadOverlayLayers() {
         enableLayerSelection(localLayer, 'Local Level');
         console.log('Local Level loaded:', geojsonLocal.features.length, 'features');
 
-        const districtResponse = await fetch('http://localhost:3000/api/district');
+        const districtResponse = await fetch(`${BASE_URL}/api/district`);
         if (!districtResponse.ok) throw new Error('Failed to fetch district data: ' + districtResponse.statusText);
         geojsonDistrict = await districtResponse.json();
         if (!geojsonDistrict || !geojsonDistrict.type || !Array.isArray(geojsonDistrict.features)) {
@@ -150,7 +151,7 @@ async function loadOverlayLayers() {
         enableLayerSelection(districtLayer, 'District');
         console.log('District loaded:', geojsonDistrict.features.length, 'features');
 
-        const provinceResponse = await fetch('http://localhost:3000/api/province');
+        const provinceResponse = await fetch(`${BASE_URL}/api/province`);
         if (!provinceResponse.ok) throw new Error('Failed to fetch province data: ' + provinceResponse.statusText);
         geojsonProvince = await provinceResponse.json();
         if (!geojsonProvince || !geojsonProvince.type || !Array.isArray(geojsonProvince.features)) {
@@ -347,7 +348,7 @@ async function loadRoadBufferData() {
         geojsonHouses = null;
         geojsonHospitals = null;
 
-        const roadResponse = await fetch('http://localhost:3000/api/roads');
+        const roadResponse = await fetch(`${BASE_URL}/api/roads`);
         if (!roadResponse.ok) throw new Error('Failed to fetch roads: ' + roadResponse.statusText);
         geojsonRoads = await roadResponse.json();
         if (!geojsonRoads || !geojsonRoads.type || !Array.isArray(geojsonRoads.features)) {
@@ -373,7 +374,7 @@ async function loadRoadBufferData() {
         }).addTo(map);
         map.fitBounds(layerRoads.getBounds());
 
-        const houseResponse = await fetch('http://localhost:3000/api/buildings');
+        const houseResponse = await fetch(`${BASE_URL}/api/buildings`);
         if (!houseResponse.ok) throw new Error('Failed to fetch buildings: ' + houseResponse.statusText);
         geojsonHouses = await houseResponse.json();
         if (!geojsonHouses || !geojsonHouses.type || !Array.isArray(geojsonHouses.features)) {
@@ -389,7 +390,7 @@ async function loadRoadBufferData() {
             }
         }).addTo(map);
 
-        const hospitalResponse = await fetch('http://localhost:3000/api/hospitaa');
+        const hospitalResponse = await fetch(`${BASE_URL}/api/hospitaa`);
         if (!hospitalResponse.ok) throw new Error('Failed to fetch hospitals: ' + hospitalResponse.statusText);
         geojsonHospitals = await hospitalResponse.json();
         if (!geojsonHospitals || !geojsonHospitals.type || !Array.isArray(geojsonHospitals.features)) {
@@ -468,6 +469,7 @@ function roadBufferTool() {
         if (!buffered || !buffered.features.length) {
             alert("Failed to create buffer. Please try a different road or distance.");
             return;
+            
         }
 
         const affectedHouses = [];
@@ -496,7 +498,8 @@ function roadBufferTool() {
                 const isWithin = isPoint ? turf.booleanWithin(hospital, buffered.features[0]) : turf.intersect(hospital, buffered.features[0]);
                 if (isWithin) {
                     affectedHospitals.push(hospital);
-                    hospitalCount++;
+                    hospitalCount++;hin = isPoint ? turf.booleanWithin(hospital, buffered.features[0]) : turf.intersect(hospital, buffered.features[0]);
+               
                 }
             } catch (err) {
                 console.warn(`Error processing hospital ID ${hospital.properties.id || 'Unknown'}:`, err.message);
@@ -578,7 +581,7 @@ async function loadProximityData() {
         geojsonHouses = null;
         geojsonHospitals = null;
 
-        const houseResponse = await fetch('http://localhost:3000/api/buildings');
+        const houseResponse = await fetch(`${BASE_URL}/api/buildings`);
         if (!houseResponse.ok) throw new Error('Failed to fetch buildings: ' + houseResponse.statusText);
         geojsonHouses = await houseResponse.json();
         if (!geojsonHouses || !geojsonHouses.type || !Array.isArray(geojsonHouses.features)) {
@@ -614,7 +617,7 @@ async function loadProximityData() {
         console.log('Buildings layer added to map:', geojsonHouses.features.length, 'features');
         enableLayerSelection(layerHouses, 'Building');
 
-        const hospitalResponse = await fetch('http://localhost:3000/api/hospitaa');
+        const hospitalResponse = await fetch(`${BASE_URL}/api/hospitaa`);
         if (!hospitalResponse.ok) throw new Error('Failed to fetch hospitals: ' + hospitalResponse.statusText);
         geojsonHospitals = await hospitalResponse.json();
         if (!geojsonHospitals || !geojsonHospitals.type || !Array.isArray(geojsonHospitals.features)) {
@@ -778,7 +781,7 @@ async function runProximityAnalysis() {
         console.log('Buffer layer added to map:', buffered.features.length, 'features');
         if (layerPoint && map) layerPoint.addTo(map);
         console.log('Marked point layer re-added to map');
-        
+
         const nearestHospitalLayer = L.geoJSON(nearestHospital, {
             style: { color: '#16a34a', weight: 3, fillOpacity: 0.9 },
             pointToLayer: function(feature, latlng) {
@@ -841,3 +844,24 @@ map.on('click', function(e) {
 
 // Initialize overlay layers
 loadOverlayLayers();
+// Example function to call backend API and get data
+function fetchBackendData() {
+  fetch('https://backend-yytm.onrender.com/api/test')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not OK');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Data from backend:', data);
+      // You can update your HTML page here with the data
+      document.getElementById('result').innerText = JSON.stringify(data);
+    })
+    .catch(error => {
+      console.error('Error fetching backend data:', error);
+    });
+}
+
+// Call the function when page loads or on some button click
+window.onload = fetchBackendData;
